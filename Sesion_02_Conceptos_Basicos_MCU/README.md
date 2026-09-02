@@ -50,7 +50,7 @@ Comprender la relación entre el código de software, el mapa de memoria (Flash,
 ---
 
 ## 📊 Entregable Técnico (Infografía)
-📄 **Infografía de Arquitectura:** [Descargar PDF](Sesion_02_Conceptos_Basicos_MCU/Infografia/Cisneros_Ana_S02_Infografia.pdf)
+📄 **Infografía de Arquitectura:** [Descargar PDF](./Infografia/Cisneros_Ana_S02_Infografia.pdf)
 * Explica la diferencia entre RP2040 y RP2350, el mapa de memoria, el concepto de registros y la ruta de ejecución de MicroPython vs C/C++.
 
 ---
