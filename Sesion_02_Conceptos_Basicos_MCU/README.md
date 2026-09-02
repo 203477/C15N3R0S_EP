@@ -13,7 +13,7 @@ Comprender la relación entre el código de software, el mapa de memoria (Flash,
 ![Diagrama de conexión](./evidence/hardware_photo.jpg)
 
 **🔗 Enlace a la simulación en Wokwi:**
-[Haz clic aquí para ver y correr la simulación](https://wokwi.com/projects/474086094084883457)
+[Haz clic aquí para ver y correr la simulación](./wokwi/enlace.md)
 
 ---
 
