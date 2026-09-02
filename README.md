@@ -14,7 +14,7 @@ Este repositorio contiene todas las prácticas, retos y evidencias desarrolladas
 
 | Sesión | Tema | Lenguaje(s) | Enlace a la Práctica |
 | :---: | :--- | :---: | :--- |
-| **01** | Hola Mundo Dual (Blink) | Python / C++ | [Ver Sesión 01](Sesion_02_Conceptos_Basicos_MCU) |
+| **01** | Hola Mundo Dual (Blink) | Python / C++ | [Ver Sesión 01](Sesion_01_Entorno) |
 | **02** | Control GPIO: Semáforo | Python / C++ | [Ver sesión 02](Sesion_02_Conceptos_Basicos_MCU) |
 | **...** | ... | ... | ... |
 
