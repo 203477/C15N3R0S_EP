@@ -1,5 +1,5 @@
 # Sesión 02 — Conceptos básicos de microcontroladores
-## Contenido de esta carpeta
+## Contenido
 
 | Carpeta | Contenido |
 |---|---|
@@ -19,7 +19,7 @@ Comprender la relación entre el código de software, el mapa de memoria (Flash,
 * Computadora con VS Code (Pico SDK / MicroPico) o Thonny
 * Simulador Wokwi
 
-## 📊 Entregable Técnico (Infografía)
+## 📊 Infografía técnica (Challenge 02)
 📄 **Infografía de Arquitectura:** [Descargar PDF](./Infografia/Cisneros_Ana_S02_Infografia.pdf)
 * Explica la diferencia entre RP2040 y RP2350, el mapa de memoria, el concepto de registros y la ruta de ejecución de MicroPython vs C/C++.
 
