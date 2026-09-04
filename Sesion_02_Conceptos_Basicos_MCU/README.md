@@ -1,4 +1,14 @@
-# 🛠️ Práctica 02: Conceptos Básicos de MCU, Mapa de Memoria y Registros
+# Sesión 02 — Conceptos básicos de microcontroladores
+## Contenido de esta carpeta
+
+| Carpeta | Contenido |
+|---|---|
+| `infografia/` | Infografía técnica (Challenge 02) |
+| `micropython/` | `memory_probe.py` — MicroPython (DO 01: Prueba de Memoria) |
+| `c_sdk/` | `memory_map_demo.c` + `CMakeLists.txt` — C/C++ (Pico SDK - DO 02: Mapa de Memoria y Registros) |
+| `wokwi/` | Enlaces de simulaciones |
+| `evidence/` | Evidencia (virtual y física) |
+
 
 ## 📝 Objetivo de la Práctica
 Comprender la relación entre el código de software, el mapa de memoria (Flash, SRAM, Stack, Heap) y los registros de hardware del microcontrolador (RP2040 / RP2350), verificando la gestión de memoria en MicroPython y la asignación de direcciones de memoria y manipulación de GPIO mediante registros en C/C++ (Pico SDK).
@@ -9,15 +19,11 @@ Comprender la relación entre el código de software, el mapa de memoria (Flash,
 * Computadora con VS Code (Pico SDK / MicroPico) o Thonny
 * Simulador Wokwi
 
-## 🔌 Diagrama de Conexión y Simulación
-![Diagrama de conexión](./evidence/hardware_photo.jpg)
-
-**🔗 Enlace a la simulación en Wokwi:**
-[Haz clic aquí para ver y correr la simulación](./wokwi/enlace.md)
+## 📊 Entregable Técnico (Infografía)
+📄 **Infografía de Arquitectura:** [Descargar PDF](./Infografia/Cisneros_Ana_S02_Infografia.pdf)
+* Explica la diferencia entre RP2040 y RP2350, el mapa de memoria, el concepto de registros y la ruta de ejecución de MicroPython vs C/C++.
 
 ---
-
-## 💻 Códigos Fuente y Explicación
 
 ### 🐍 MicroPython (DO 01: Prueba de Memoria)
 📄 **Código fuente:** [Ver archivo `memory_probe.py` aquí](./micropython/memory_probe.py)
@@ -49,15 +55,9 @@ Comprender la relación entre el código de software, el mapa de memoria (Flash,
 
 ---
 
-## 📊 Entregable Técnico (Infografía)
-📄 **Infografía de Arquitectura:** [Descargar PDF](./Infografia/Cisneros_Ana_S02_Infografia.pdf)
-* Explica la diferencia entre RP2040 y RP2350, el mapa de memoria, el concepto de registros y la ruta de ejecución de MicroPython vs C/C++.
-
----
-
-## 🎥 Evidencia en Video / Hardware
-* **Captura de salida serial:** [Ver captura](./evidence/serial_output.png)
-* **Demostración en video:** [▶️ Ver demostración en video aquí](https://youtube.com/...)
+## 🎥 Evidencia
+* **Wokwi:** [`wokwi/Wokwi.md`](./wokwi/Wokwi.md) 
+* **Captura(s):** [Ver captura](./evidence/serial_output.png)
 
 ---
 
