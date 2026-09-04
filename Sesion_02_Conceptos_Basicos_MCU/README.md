@@ -1,13 +1,13 @@
 # Sesión 02 — Conceptos básicos de microcontroladores
 ## Contenido
 
-| Carpeta | Contenido |
-|---|---|
-| `infografia/` | Infografía técnica (Challenge 02) |
-| `micropython/` | `memory_probe.py` — MicroPython (DO 01: Prueba de Memoria) |
-| `c_sdk/` | `memory_map_demo.c` + `CMakeLists.txt` — C/C++ (Pico SDK - DO 02: Mapa de Memoria y Registros) |
-| `wokwi/` | Enlaces de simulaciones |
-| `evidence/` | Evidencia (virtual y física) |
+| Carpeta | Contenido | Descripcion |
+|---|---| ---|
+| [`infographic/`](./infographic/) |  [`Cisneros_Ana_S02_Infografia.pdf`](./infographic/Cisneros_Ana_S02_Infografia.pdf)  | [`Infografía técnica (Challenge 02)`]|
+| [`micropython/`](./micropython/) | [`memory_probe.py`](./micropython/memory_probe.py) | MicroPython (DO 01: Prueba de Memoria) |
+| [`c_sdk/`](./c_sdk/) | [`memory_map_demo.c`](./c_sdk/memory_map_demo.c) & [`CMakeLists.txt`](./c_sdk/CMakeLists.txt) | C/C++ Pico SDK - (DO 02: Mapa de Memoria y Registros) |
+| [`wokwi/`](./wokwi/) | [`enlace.md`](./wokwi/enlace.md) | Enlace(s) de simulaciones | 
+| [`evidence/`](./evidence/) | Cpturas de Evidencia (virtual y física) | Capturas de Evidencia (virtual y física) |
 
 
 ## 📝 Objetivo de la Práctica
@@ -20,7 +20,7 @@ Comprender la relación entre el código de software, el mapa de memoria (Flash,
 * Simulador Wokwi
 
 ## 📊 Infografía técnica (Challenge 02)
-📄 **Infografía de Arquitectura:** [Descargar PDF](./Infografia/Cisneros_Ana_S02_Infografia.pdf)
+📄 **Infografía de Arquitectura:** [PDF](./infographic/Cisneros_Ana_S02_Infografia.pdf)
 * Explica la diferencia entre RP2040 y RP2350, el mapa de memoria, el concepto de registros y la ruta de ejecución de MicroPython vs C/C++.
 
 ---
