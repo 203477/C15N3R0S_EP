@@ -2,14 +2,14 @@
 
 ### Contenido
 
-| Carpeta / Archivo | Contenido | Descripción |
+| Archivos | Contenido | Descripción |
 | --- | --- | --- |
 | `micropython/01_button_read.py` | MicroPython (DO 01: Lectura de botón) | Lectura digital con resistencia pull-up interna |
 | `micropython/02_button_debounce.py` | MicroPython (DO 02: Debounce) | Algoritmo antirrebote y retención *wait-for-release* |
 | `micropython/03_semaforo_peatonal.py` | MicroPython (Challenge 03: Semáforo) | Control semafórico interactivo con máquina de estados finitos |
 | `cpp/button_read/button_read.c` | C/C++ Pico SDK (DO 01: Lectura de botón) | Configuración y lectura de GPIO en bajo nivel |
 | `cpp/traffic_light/traffic_light.c` | C/C++ Pico SDK (Challenge 03: Semáforo) | Implementación equivalente en C con invariante de seguridad |
-| `wokwi/diagram.json` | Simulación Wokwi | Esquemático virtual para validación previa en wokwi.com |
+| `wokwi/` | Simulación Wokwi | Validación virtual previa en wokwi.com |
 | `evidence/` | Capturas y multimedia | Registros visuales en Wokwi, fotos y video del hardware |
 
 ---
