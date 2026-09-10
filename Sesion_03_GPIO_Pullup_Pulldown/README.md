@@ -14,13 +14,13 @@
 
 ---
 
-### 📝 Objetivo de la Práctica
+### Objetivo de la Práctica
 
 Comprender y aplicar la interfaz GPIO como el límite funcional entre el software y el mundo físico (Entrada $\rightarrow$ Decisión $\rightarrow$ Salida) sobre la Raspberry Pi Pico. Se abordan problemas eléctricos inherentes como el estado de alta impedancia (*pin flotante*) y el rebote mecánico (*contact bounce*), implementando un semáforo peatonal reactivo mediante una máquina de estados finitos que garantice el cumplimiento estricto de la invariante de seguridad (autos y peatones jamás comparten la señal verde).
 
 ---
 
-### 📦 Materiales Utilizados
+### Materiales Utilizados
 
 * 1x Raspberry Pi Pico 2 W (RP2350) o Raspberry Pi Pico (RP2040)
 * 1x Pulsador de cuatro terminales (*pushbutton*)
@@ -34,7 +34,7 @@ Comprender y aplicar la interfaz GPIO como el límite funcional entre el softwar
 
 ---
 
-### 🔌 Diagrama y Conexión del Circuito
+### Diagrama y Conexión del Circuito
 
 El circuito se construyó por fases modulares:
 
@@ -68,9 +68,9 @@ Las laminillas metálicas del botón vibran durante unos milisegundos antes de a
 
 ---
 
-### 🐍 MicroPython (DO 01, DO 02 y Challenge 03)
+### icroPython (DO 01, DO 02 y Challenge 03)
 
-📄 **Códigos fuente:**
+**Códigos fuente:**
 
 * `micropython/01_button_read.py`
 * `micropython/02_button_debounce.py`
@@ -91,9 +91,9 @@ Las laminillas metálicas del botón vibran durante unos milisegundos antes de a
 
 ---
 
-### ⚙️ C/C++ (Pico SDK - DO 01 y Challenge 03)
+### C/C++ (Pico SDK - DO 01 y Challenge 03)
 
-📄 **Códigos fuente:**
+ **Códigos fuente:**
 
 * `cpp/button_read/button_read.c`
 * `cpp/traffic_light/traffic_light.c`
@@ -114,7 +114,7 @@ Las laminillas metálicas del botón vibran durante unos milisegundos antes de a
 
 ---
 
-### 🧪 Plan de Validación y Pruebas
+### Plan de Validación y Pruebas
 
 | Caso de prueba | Condición de entrada | Comportamiento esperado | Simulación (Wokwi) | Placa física |
 | --- | --- | --- | --- | --- |
@@ -130,7 +130,7 @@ Las laminillas metálicas del botón vibran durante unos milisegundos antes de a
 
 ---
 
-### 🎥 Evidencia
+### Evidencia
 
 * **Wokwi:** (capturas `evidence/wokwi_button.png` y `evidence/wokwi_semaforo.png`).
 * **Hardware físico:** Fotografías del protoboard en operación en la carpeta `evidence/` (`hardware_photo.jpg`, `S0.jpg`, `S1.jpg`, `S2.jpg` y secuencias de parpadeo `S3_1.jpg` a `S3_4.jpg`).
@@ -138,7 +138,7 @@ Las laminillas metálicas del botón vibran durante unos milisegundos antes de a
 
 ---
 
-### 🤔 Conclusiones o Retos Superados
+### Conclusiones o Retos Superados
 
 * **Entradas flotantes y acondicionamiento:** Dejar un pin en alta impedancia sin conexión definida causa fluctuaciones impredecibles en la lectura digital. El uso de la resistencia pull-up interna soluciona este comportamiento al mantener el pin acoplado a $3.3\,\text{V}$ en estado de reposo.
 * **Portabilidad y compilación cruzada:** El hardware de prueba físico (Raspberry Pi Pico 2 W con chip RP2350) requiere binarios compilados específicamente para su arquitectura (`pico2_w`). Para validar el código C en Wokwi (emulador de RP2040), se mantuvo el código fuente idéntico pero ajustando el objetivo de compilación correspondiente a cada entorno.
