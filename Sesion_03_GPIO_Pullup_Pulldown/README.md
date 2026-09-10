@@ -133,8 +133,8 @@ Las laminillas metálicas del botón vibran durante unos milisegundos antes de a
 ### Evidencia
 
 * **Wokwi:** (capturas `evidence/wokwi_button.png` y `evidence/wokwi_semaforo.png`).
-* **Hardware físico:** Fotografías del protoboard en operación en la carpeta `evidence/` (`hardware_photo.jpg`, `S0.jpg`, `S1.jpg`, `S2.jpg`, `S3.jpg`).
-* **Video demostrativo:** `evidence/03_video.mp4` que muestra la ejecución del ciclo autónomo en la Raspberry Pi Pico.
+* **Hardware físico:** Fotografías del protoboard en operación en la carpeta `evidence/` ([`hardware_photo.jpeg`](./evidence/hardware_photo.jpeg), [`S0.jpeg`](./evidence/S0.jpeg), [`S1.jpeg`](./evidence/S1.jpeg), [`S2.jpeg`](./evidence/S2.jpeg), [`S3.jpeg`](./evidence/S3.jpeg)).
+* **Video demostrativo:** [`evidence/03_video.mp4`](./evidence/03_video.mp4) que muestra la ejecución del ciclo autónomo en la Raspberry Pi Pico.
 
 ---
 
