@@ -8,16 +8,16 @@ led_red = Pin(13, Pin.OUT)
 led_yellow = Pin(14, Pin.OUT)
 led_green = Pin(15, Pin.OUT)
 
-STATE_BLOQUEADO = 0
-STATE_ESPERA_B = 1
-STATE_ACCESO = 2
-STATE_SEGURIDAD = 3
+BLOQUEADO = 0
+ESPERANDO_B = 1
+ACCESO = 2
+SEGURIDAD = 3
 
-estado_actual = STATE_BLOQUEADO
+estado = BLOQUEADO
 intentos_fallidos = 0
 
-ultimo_tiempo_a = 0
-ultimo_tiempo_b = 0
+ultimo_a_ms = 0
+ultimo_b_ms = 0
 DEBOUNCE_MS = 250
 
 timer_sistema = Timer()
@@ -27,105 +27,87 @@ def set_leds(red, yellow, green):
     led_yellow.value(yellow)
     led_green.value(green)
 
-def mostrar_pantalla_bloqueado():
-    print("[LISTO] SISTEMA BLOQUEADO")
-    print("Secuencia correcta: A -> B")
+def ir_bloqueado():
+    global estado
+    estado = BLOQUEADO
+    set_leds(1, 0, 0)
+    print("[BLOQUEO] Sistema listo. Presiona A para iniciar.")
 
 def callback_timeout(t):
-    global estado_actual, intentos_fallidos
-    if estado_actual == STATE_ESPERA_B:
+    global estado, intentos_fallidos
+    if estado == ESPERANDO_B:
         print("[ERROR] Tiempo agotado esperando B (TIMEOUT)")
-        intentos_fallidos += 1
-        print(f"[ERROR] Intentos fallidos: {intentos_fallidos}")
-        verificar_intentos()
+        registrar_fallo()
 
 def callback_fin_acceso(t):
-    global estado_actual
     print("[TIMER] Fin del acceso")
-    estado_actual = STATE_BLOQUEADO
-    set_leds(1, 0, 0)
-    mostrar_pantalla_bloqueado()
+    ir_bloqueado()
 
-def callback_fin_bloqueo(t):
-    global estado_actual, intentos_fallidos
-    print("[TIMER] Fin del bloqueo")
+def callback_fin_seguridad(t):
+    global intentos_fallidos
+    print("[TIMER] Fin del bloqueo de seguridad")
     intentos_fallidos = 0
-    print("[RESET] Intentos fallidos = 0")
-    estado_actual = STATE_BLOQUEADO
-    set_leds(1, 0, 0)
-    mostrar_pantalla_bloqueado()
+    ir_bloqueado()
 
-def verificar_intentos():
-    global estado_actual, intentos_fallidos
+def registrar_fallo():
+    global estado, intentos_fallidos
+    intentos_fallidos += 1
+    print(f"[FALLO] Intento fallido. Contador: {intentos_fallidos}")
     if intentos_fallidos >= 3:
-        estado_actual = STATE_SEGURIDAD
+        estado = SEGURIDAD
         set_leds(1, 0, 0)
-        print("[BLOQUEO] 3 errores detectados")
-        print("[BLOQUEO] Sistema bloqueado 10 segundos")
-        timer_sistema.init(mode=Timer.ONE_SHOT, period=10000, callback=callback_fin_bloqueo)
+        print("[SEGURIDAD] 3 errores detectados. Sistema bloqueado 10 segundos.")
+        timer_sistema.init(mode=Timer.ONE_SHOT, period=10000, callback=callback_fin_seguridad)
     else:
-        estado_actual = STATE_BLOQUEADO
-        set_leds(1, 0, 0)
-        print("[LISTO] Intenta nuevamente con A -> B")
+        ir_bloqueado()
 
-def handle_btn_a(pin):
-    global estado_actual, ultimo_tiempo_a
+def ir_esperando_b():
+    global estado
+    estado = ESPERANDO_B
+    set_leds(0, 1, 0)
+    print("[ESPERANDO B] Boton A detectado. Tienes 5s para presionar B.")
+    timer_sistema.init(mode=Timer.ONE_SHOT, period=5000, callback=callback_timeout)
+
+def ir_acceso_concedido():
+    global estado, intentos_fallidos
+    timer_sistema.deinit()
+    estado = ACCESO
+    intentos_fallidos = 0  # <--- AQUÍ REINICIAMOS EL CONTADOR DE ERRORES
+    set_leds(0, 0, 1)
+    print("[ACCESO CONCEDIDO] Correcto. Abriendo por 3s... (Contador de errores reiniciado)")
+    timer_sistema.init(mode=Timer.ONE_SHOT, period=3000, callback=callback_fin_acceso)
+
+def interruption_a(pin):
+    global ultimo_a_ms
     ahora = time.ticks_ms()
-    if time.ticks_diff(ahora, ultimo_tiempo_a) < DEBOUNCE_MS:
+    if time.ticks_diff(ahora, ultimo_a_ms) < DEBOUNCE_MS:
         return
-    ultimo_tiempo_a = ahora
+    ultimo_a_ms = ahora
 
-    if estado_actual == STATE_SEGURIDAD:
-        print("[INFO] A ignorado: bloqueo de seguridad")
-        return
-    
-    if estado_actual == STATE_ACCESO:
-        return
+    if estado == BLOQUEADO:
+        ir_esperando_b()
+    else:
+        print("[A] Boton A presionado de nuevo, se ignora, ya esta en proceso.")
 
-    if estado_actual == STATE_ESPERA_B:
-        return
-
-    if estado_actual == STATE_BLOQUEADO:
-        print("[A] Boton A detectado")
-        print("[ESPERA] Presiona B antes de 5 segundos")
-        estado_actual = STATE_ESPERA_B
-        set_leds(0, 1, 0)
-        timer_sistema.init(mode=Timer.ONE_SHOT, period=5000, callback=callback_timeout)
-
-def handle_btn_b(pin):
-    global estado_actual, intentos_fallidos, ultimo_tiempo_b
+def interruption_b(pin):
+    global ultimo_b_ms
     ahora = time.ticks_ms()
-    if time.ticks_diff(ahora, ultimo_tiempo_b) < DEBOUNCE_MS:
+    if time.ticks_diff(ahora, ultimo_b_ms) < DEBOUNCE_MS:
         return
-    ultimo_tiempo_b = ahora
+    ultimo_b_ms = ahora
 
-    if estado_actual == STATE_SEGURIDAD:
-        print("[INFO] B ignorado: bloqueo de seguridad")
-        return
-
-    if estado_actual == STATE_ACCESO:
-        return
-
-    if estado_actual == STATE_BLOQUEADO:
+    if estado == BLOQUEADO:
         print("[ERROR] B fue presionado antes que A")
-        intentos_fallidos += 1
-        print(f"[ERROR] Intentos fallidos: {intentos_fallidos}")
-        verificar_intentos()
+        registrar_fallo()
+    elif estado == ESPERANDO_B:
+        ir_acceso_concedido()
+    else:
+        print("[B] Boton B presionado, se ignora.")
 
-    elif estado_actual == STATE_ESPERA_B:
-        timer_sistema.deinit()
-        print("[B] Boton B detectado")
-        print("[OK] ACCESO CONCEDIDO")
-        print("[TIMER] Acceso activo durante 3 segundos")
-        estado_actual = STATE_ACCESO
-        set_leds(0, 0, 1)
-        timer_sistema.init(mode=Timer.ONE_SHOT, period=3000, callback=callback_fin_acceso)
+btn_a.irq(trigger=Pin.IRQ_FALLING, handler=interruption_a)
+btn_b.irq(trigger=Pin.IRQ_FALLING, handler=interruption_b)
 
-btn_a.irq(trigger=Pin.IRQ_FALLING, handler=handle_btn_a)
-btn_b.irq(trigger=Pin.IRQ_FALLING, handler=handle_btn_b)
-
-set_leds(1, 0, 0)
-mostrar_pantalla_bloqueado()
+ir_bloqueado()
 
 while True:
     time.sleep(1)
