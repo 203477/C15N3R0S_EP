@@ -127,8 +127,8 @@ Se probó el código validando la lógica de las rampas a través de los `print(
 
 | Evidencia | Archivo |
 | --- | --- |
-| Simulación Wokwi | "./wokwi/enlace.md" |
-| Montaje físico | *./evidence/hardware.jpeg* |
+| Simulación Wokwi | [`wokwi/`]("./wokwi")|
+| Montaje físico | [`evidence/`]("evidence")  |
 
 
 ## 11. Conclusión
