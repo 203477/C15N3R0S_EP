@@ -173,37 +173,10 @@ La confirmación (ACK) es una respuesta humana que le indica a la computadora: "
 **6. ¿Qué métricas físicas validan que nuestro código no sufre retardos por bloqueos?**
 La prueba definitiva es observar el "Heartbeat" (LED azul) destellando a un ritmo matemáticamente perfecto, ver a la consola reportar consistentemente casi 50 ciclos por segundo, e interactuar con el pulsador notando una reactividad instantánea incluso cuando el procesador está bajo carga de reportes.
 
-## 10. Documentación Visual
-
-* **Enlace de proyecto en Wokwi:** Referirse a `wokwi/enlace.md`.
-* **Captura Terminal Wokwi:** `evidence/serial_wokwi.png` (Muestra ACK y cambios lógicos).
-* **Captura Terminal Placa:** `evidence/serial_pico.png` (Detalle de muestras de Core 1).
-* **Evidencia de Ensamble Físico:** `evidence/circuito.png`.
-
-## 11. Bitácora de Inconvenientes
-
-## 12. Reflexiones Finales
-
----
 
 ## Estructura del Repositorio e Instrucciones de Uso
 
-* `main_wokwi.py`: Variante concurrente para simulación web.
-* `main_dualcore_physical.py`: Variante con librería `_thread` para test en hardware.
 * `wokwi/diagram.json`: Tipología de pines y componentes.
 * `wokwi/enlace.md`: URL del simulador.
 * `evidence/`: Banco de capturas de pantalla.
 
-**Para testear en plataforma web:**
-
-1. Crear un nuevo proyecto "Raspberry Pi Pico + MicroPython" en wokwi.com.
-2. Sobrescribir el esquemático con el código de `diagram.json`.
-3. Pegar el contenido de `main_wokwi.py` en la pestaña de `main.py`.
-
-**Para testear en la Raspberry Pi Pico (Terminal local):**
-
-```bash
-# Ejecutar directamente desde la terminal del IDE usando mpremote
-mpremote run main_dualcore_physical.py
-
-```
