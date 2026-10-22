@@ -70,20 +70,22 @@ El intercambio de datos seriales requiere gestionar el buffer FIFO del microcont
 
 ---
 
-### 5. Resultados de la Tabla de Pruebas
+### 5. Resultados de la tabla de pruebas
 
-| # | Comando Inyectado | UART RX | Respuesta Esperada | Resultado Observado | Estado LED1 | Estado LED2 | Estado |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| **1** | `PING` | `PING` | `ACK,PONG` | `ACK,PONG` | Sin cambio | Sin cambio | ✅ |
-| **2** | `SET,LED1,1` | `SET,LED1,1` | `ACK,LED1,1` | `ACK,LED1,1` | ON | Sin cambio | ✅ |
-| **3** | `SET,LED1,0` | `SET,LED1,0` | `ACK,LED1,0` | `ACK,LED1,0` | OFF | Sin cambio | ✅ |
-| **4** | `SET,LED2,1` | `SET,LED2,1` | `ACK,LED2,1` | `ACK,LED2,1` | Sin cambio | ON | ✅ |
-| **5** | `SET,ALL,1` | `SET,ALL,1` | `ACK,ALL,1` | `ACK,ALL,1` | ON | ON | ✅ |
-| **6** | `GET,STATUS` | `GET,STATUS` | `STATUS,LED1,1,LED2,1` | `STATUS,LED1,1,LED2,1` | ON | ON | ✅ |
-| **7** | `SET,LED3,1` | `SET,LED3,1` | `ERR,BAD_SET_FRAME` | `ERR,BAD_SET_FRAME` | ON | ON | ✅ |
-| **8** | `SET,LED1,9` | `SET,LED1,9` | `ERR,BAD_SET_FRAME` | `ERR,BAD_SET_FRAME` | ON | ON | ✅ |
-| **9** | `HOLA_MUNDO` | `HOLA_MUNDO` | `ERR,UNKNOWN_FRAME` | `ERR,UNKNOWN_FRAME` | ON | ON | ✅ |
-| **10** | `SET,ALL,0` | `SET,ALL,0` | `ACK,ALL,0` | `ACK,ALL,0` | OFF | OFF | ✅ |
+| # | Comando ingresado | USB CMD | UART RX | Respuesta (`RESP`) | LED1 | LED2 | Estado |
+| :---: | :--- | :--- | :--- | :--- | :---: | :---: | :---: |
+| **0** | `SET,ALL,0` | `SET,ALL,0` | `SET,ALL,0` | `ACK,ALL,0` | OFF | OFF | ✅ |
+| **1** | `PING` | `PING` | `PING` | `ACK,PONG` | OFF | OFF | ✅ |
+| **2** | `SET,LED1,1` | `SET,LED1,1` | `SET,LED1,1` | `ACK,LED1,1` | ON | OFF | ✅ |
+| **3** | `SET,LED1,0` | `SET,LED1,0` | `SET,LED1,0` | `ACK,LED1,0` | OFF | OFF | ✅ |
+| **4** | `SET,LED2,1` | `SET,LED2,1` | `SET,LED2,1` | `ACK,LED2,1` | OFF | ON | ✅ |
+| **5** | `SET,LED2,0` | `SET,LED2,0` | `SET,LED2,0` | `ACK,LED2,0` | OFF | OFF | ✅ |
+| **6** | `SET,ALL,1` | `SET,ALL,1` | `SET,ALL,1` | `ACK,ALL,1` | ON | ON | ✅ |
+| **7** | `GET,STATUS` | `GET,STATUS` | `GET,STATUS` | `STATUS,LED1,1,LED2,1` | ON | ON | ✅ |
+| **8** | `SET,LED1,0` | `SET,LED1,0` | `SET,LED1,0` | `ACK,LED1,0` | OFF | ON | ✅ |
+| **9** | `GET,STATUS` | `GET,STATUS` | `GET,STATUS` | `STATUS,LED1,0,LED2,1` | OFF | ON | ✅ |
+| **10** | `SET,ALL,0` | `SET,ALL,0` | `SET,ALL,0` | `ACK,ALL,0` | OFF | OFF | ✅ |
+| **11** | `GET,STATUS` | `GET,STATUS` | `GET,STATUS` | `STATUS,LED1,0,LED2,0` | OFF | OFF | ✅ |
 
 ---
 
