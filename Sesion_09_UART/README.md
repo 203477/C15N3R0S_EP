@@ -1,7 +1,5 @@
 # Sesión 09 — Protocolo Serie UART y Arquitectura Loopback
 **Reto 09 — UART Command Center**  
-**Ana Nickole Cisneros Herrera · Lab. de Elementos Programables**
-
 ---
 
 ### 1. Objetivo y qué es UART
