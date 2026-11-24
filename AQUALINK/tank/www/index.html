@@ -1,1 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AQUALINK</title>
+<style>
+  :root { --ocean:#0B4F6C; --deep:#06324A; --coral:#E4572E; --teal:#1B998B; --sand:#F4E3C1;
+          --ink:#12212B; --muted:#5D7380; --card:#FFFFFF; --bg:#EEF6F7; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:var(--ocean); color:#fff; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; }
+  header h1 { margin:0; font-size:20px; letter-spacing:.5px; }
+  header span { font-size:13px; opacity:.85; }
+  main { max-width:920px; margin:0 auto; padding:16px; }
+  .tanks { display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:nowrap; }
+  .tank { position:relative; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+  .tank .label { position:absolute; left:8px; top:6px; font-size:12px; font-weight:600; }
+  #tankA, #tankB { width:46%; aspect-ratio:2/1; background:#07110F; color:#CFF7E8; border:5px solid #2A3B39; }
+  .bridge { width:8%; text-align:center; font-weight:700; color:var(--muted); font-size:22px; }
+  .bridge.on { color:var(--teal); }
+  .fish { position:absolute; transform:translate(-50%,-50%); transition:left .7s linear, top .7s linear; font-size:clamp(14px,3vw,24px); white-space:nowrap; }
+  .fish { font-family:monospace; font-weight:700; color:#CFF7E8; }
+  .empty { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:13px; opacity:.6; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:16px; }
+  .card { background:var(--card); border-radius:10px; padding:12px; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+  .card .k { font-size:12px; color:var(--muted); }
+  .card .v { font-size:22px; font-weight:700; margin-top:4px; }
+  .bar { height:8px; background:#DCE8EA; border-radius:4px; margin-top:6px; overflow:hidden; }
+  .bar > div { height:100%; background:var(--teal); width:0; transition:width .5s; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; align-items:center; }
+  button { border:0; border-radius:8px; padding:10px 14px; font-size:15px; font-weight:600; cursor:pointer; background:var(--ocean); color:#fff; }
+  button.coral { background:var(--coral); }
+  button.ghost { background:#fff; color:var(--ocean); border:2px solid var(--ocean); }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  input[type=text] { padding:9px; border-radius:8px; border:1px solid #AFC7CC; font-size:15px; width:130px; }
+  .row { display:flex; gap:8px; align-items:center; }
+  #log { margin-top:14px; font-family:monospace; font-size:12px; background:var(--deep); color:#CFE6EA; border-radius:8px; padding:10px; min-height:60px; white-space:pre-wrap; }
+  .ok { color:#7FE3C4; } .err { color:#FFB199; }
+  footer { text-align:center; font-size:12px; color:var(--muted); padding:18px; }
+</style>
+</head>
+<body>
+<header><h1>AQUALINK</h1><span id="conn">conectando…</span></header>
+<main>
+  <div class="tanks" id="tanks">
+    <div class="tank" id="tankA"><div class="label">Pecera A · OLED</div></div>
+    <div class="bridge" id="bridge">⇆</div>
+    <div class="tank" id="tankB"><div class="label">Pecera B · OLED</div></div>
+  </div>
 
+  <div class="controls">
+    <button onclick="cmd('feed')">🍤 Alimentar</button>
+    <button class="coral" id="btnSend" onclick="cmd('send')">➜ Enviar a la otra pecera</button>
+    <button class="ghost" onclick="cmd('scare')">Golpear vidrio</button>
+    <div class="row"><input id="name" type="text" maxlength="10" placeholder="Nombre">
+      <button class="ghost" onclick="cmd('name', document.getElementById('name').value)">Cambiar</button></div>
+    <div class="row"><label for="lv">Luz PWM</label>
+      <input id="lv" type="range" min="0" max="100" value="100" onchange="cmd('light', this.value)"></div>
+  </div>
+
+  <div class="grid">
+    <div class="card"><div class="k">El pez está en</div><div class="v" id="where">—</div></div>
+    <div class="card"><div class="k">Hambre</div><div class="v" id="hunger">—</div><div class="bar"><div id="hbar"></div></div></div>
+    <div class="card"><div class="k">Edad · viajes</div><div class="v" id="age">—</div></div>
+    <div class="card"><div class="k">Enlace (sensor Hall)</div><div class="v" id="link">—</div></div>
+    <div class="card"><div class="k">Luz A · B</div><div class="v" id="light">—</div></div>
+    <div class="card"><div class="k">Temperatura A · B</div><div class="v" id="temp">—</div></div>
+    <div class="card"><div class="k">Envíos ok · fallidos</div><div class="v" id="xfer">—</div></div>
+    <div class="card"><div class="k">Peticiones HTTP</div><div class="v" id="req">—</div></div>
+  </div>
+
+  <div id="log">Respuestas de la API aparecerán aquí.</div>
+</main>
+<footer>Laboratorio de Elementos Programables · <a href="/api/status">/api/status</a></footer>
+
+<script>
+const $ = id => document.getElementById(id);
+let fishEl = null;
+
+function log(text, ok) {
+  const line = document.createElement('div');
+  line.className = ok ? 'ok' : 'err';
+  line.textContent = new Date().toLocaleTimeString() + '  ' + text;
+  const box = $('log');
+  if (box.dataset.started !== '1') { box.textContent = ''; box.dataset.started = '1'; }
+  box.prepend(line);
+  while (box.childNodes.length > 8) box.removeChild(box.lastChild);
+}
+
+async function cmd(name, value) {
+  const url = '/api/' + name + (value !== undefined ? '?value=' + encodeURIComponent(value) : '');
+  try {
+    const r = await fetch(url);
+    const body = await r.text();
+    log(r.status + ' ' + url + '  ' + body, r.ok);
+  } catch (e) { log('sin conexión: ' + e, false); }
+  refresh();
+}
+
+function placeFish(st) {
+  const where = st.fish_in;
+  const src = where === 'A' ? st.A : (where === 'B' ? st.B : null);
+  ['tankA', 'tankB'].forEach(id => { const e = $(id).querySelector('.empty'); if (e) e.remove(); });
+  if (!src) {
+    if (fishEl) { fishEl.remove(); fishEl = null; }
+    return;
+  }
+  const tank = $(where === 'A' ? 'tankA' : 'tankB');
+  if (!fishEl || fishEl.parentElement !== tank) {
+    if (fishEl) fishEl.remove();
+    fishEl = document.createElement('div');
+    fishEl.className = 'fish';
+    tank.appendChild(fishEl);
+  }
+  const right = src.right === 1;
+  fishEl.textContent = right ? '><(((>' : '<)))><';
+  if (src.asleep) fishEl.textContent += ' zZ';
+  fishEl.style.left = (src.x * 100) + '%';
+  fishEl.style.top = (15 + src.y * 70) + '%';
+  const other = $(where === 'A' ? 'tankB' : 'tankA');
+  const e = document.createElement('div');
+  e.className = 'empty'; e.textContent = 'vacía';
+  other.appendChild(e);
+}
+
+async function refresh() {
+  try {
+    const r = await fetch('/api/status');
+    const st = await r.json();
+    $('conn').textContent = 'en línea · modo ' + st.mode;
+    const A = st.A || {}, B = st.B || {};
+    const f = st.fish_in === 'A' ? A : (st.fish_in === 'B' ? B : null);
+
+    // orden de las peceras según de qué lado está la otra
+    const tanks = $('tanks');
+    if (st.link_side === 'left') tanks.style.flexDirection = 'row-reverse';
+    else tanks.style.flexDirection = 'row';
+    $('bridge').className = 'bridge' + (st.link ? ' on' : '');
+    $('btnSend').disabled = !st.link;
+
+    $('where').textContent = st.fish_in ? 'Pecera ' + st.fish_in : (st.B ? '—' : '¿B apagada?');
+    $('hunger').textContent = f ? f.hunger + ' %' : '—';
+    $('hbar').style.width = f ? f.hunger + '%' : '0';
+    $('hbar').style.background = f && f.hunger >= 70 ? 'var(--coral)' : 'var(--teal)';
+    $('age').textContent = f ? Math.floor(f.age_s / 60) + ' min · ' + f.gen : '—';
+    if (f && document.activeElement !== $('name')) $('name').placeholder = f.name;
+    $('link').textContent = st.link ? 'juntas (' + (st.link_side === 'right' ? 'B a la derecha' : 'B a la izquierda') + ')' : 'separadas';
+    $('light').textContent = (A.light ?? '—') + '% · ' + (B.light ?? '—') + '%';
+    $('temp').textContent = (A.temp_c ?? '—') + ' · ' + (B.temp_c ?? '—') + ' °C';
+    $('xfer').textContent = st.transfers_ok + ' · ' + st.transfers_failed;
+    $('req').textContent = A.req ?? '—';
+    $('tankA').style.filter = A.night ? 'brightness(.5)' : 'none';
+    $('tankB').style.filter = B.night ? 'brightness(.5)' : 'none';
+    placeFish(st);
+  } catch (e) {
+    $('conn').textContent = 'sin conexión';
+  }
+}
+
+refresh();
+setInterval(refresh, 1000);
+</script>
+</body>
+</html>
